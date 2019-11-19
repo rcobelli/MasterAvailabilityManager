@@ -1,0 +1,9 @@
+CREATE TABLE `events` (
+  `EventID` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `JobID` int(11) NOT NULL,
+  `EventTitle` varchar(255) NOT NULL DEFAULT '',
+  `EventDate` date NOT NULL,
+  `EventHours` int(11) DEFAULT NULL,
+  `LastUpdated` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`EventID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;

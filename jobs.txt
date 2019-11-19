@@ -1,0 +1,6 @@
+CREATE TABLE `jobs` (
+  `JobID` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `JobTitle` varchar(255) NOT NULL DEFAULT '',
+  `JobWage` double NOT NULL DEFAULT '0',
+  PRIMARY KEY (`JobID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
