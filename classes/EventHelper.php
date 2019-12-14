@@ -122,7 +122,8 @@ class EventHelper
         $this->render_events($this->getEvents(false));
     }
 
-    private function render_events($data) {
+    private function render_events($data)
+    {
         echo '<table class="table table-hover"><tbody>';
         if (empty($data)) {
             echo '<tr><th>No Events</th></tr>';
