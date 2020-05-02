@@ -85,7 +85,7 @@ while ($day <= $lastday) {
 
     echo "<td";
     if (empty($shifts) && !empty($events)) {
-        echo " class='orange' title='Missed Opporunity'";
+        echo " class='orange' title='Missed Opportunity'";
     } elseif (count($shifts) > 1) {
         echo " class='red' title='Conflicting Shifts'";
     } elseif (empty($shifts) && empty($events)) {

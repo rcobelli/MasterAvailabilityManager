@@ -1,3 +1,6 @@
+<?php
+/** @var $data array */
+?>
 <hr/>
 <form method="post">
     <h2>Edit Job</h2>

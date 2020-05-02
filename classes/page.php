@@ -3,7 +3,6 @@
 class page
 {
     private $content;
-    public $requiresAuth;
 
     public function __destruct()
     {

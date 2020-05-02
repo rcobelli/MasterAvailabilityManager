@@ -34,8 +34,7 @@ class EventHelper
 
         $handle = $this->conn->prepare($sql);
         $handle->execute();
-        $result = $handle->fetchAll(\PDO::FETCH_ASSOC);
-        return $result;
+        return $handle->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getEventsByDate($date)
@@ -43,18 +42,19 @@ class EventHelper
         $handle = $this->conn->prepare('SELECT EventID, EventTitle, EventDate, EventHours, JobTitle FROM events, jobs WHERE jobs.JobID = events.JobID AND EventDate = ?');
         $handle->bindValue(1, $date);
         $handle->execute();
-        $result = $handle->fetchAll(\PDO::FETCH_ASSOC);
-        return $result;
+        return $handle->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getEvent($id)
-    {
-        $handle = $this->conn->prepare('SELECT EventID, EventTitle, EventDate, EventHours, JobTitle FROM events, jobs WHERE jobs.JobID = events.JobID AND EventID = ?');
-        $handle->bindValue(1, $id);
-        $handle->execute();
-        $result = $handle->fetchAll(\PDO::FETCH_ASSOC)[0];
-        return $result;
-    }
+// --Commented out by Inspection START (5/2/20, 9:38 AM):
+//    public function getEvent($id)
+//    {
+//        $handle = $this->conn->prepare('SELECT EventID, EventTitle, EventDate, EventHours, JobTitle FROM events, jobs WHERE jobs.JobID = events.JobID AND EventID = ?');
+//        $handle->bindValue(1, $id);
+//        $handle->execute();
+//        return $handle->fetchAll(PDO::FETCH_ASSOC)[0];
+//    }
+// --Commented out by Inspection STOP (5/2/20, 9:38 AM)
+
 
     public function updateEvent(EventObject $data)
     {
@@ -69,7 +69,6 @@ class EventHelper
             return true;
         } else {
             print_r($handle->errorInfo());
-            exit(print_r($data));
             logMessage("Failed to update event");
             return false;
         }
@@ -91,23 +90,26 @@ class EventHelper
         }
     }
 
+    /** @noinspection PhpUnusedLocalVariableInspection */
     public function render_newEventForm()
     {
         $JobHelper = new JobHelper($this->config);
         include '../components/newEventForm.php';
     }
 
+    /** @noinspection PhpUnusedLocalVariableInspection */
     public function render_editEventForm($id)
     {
         $handle = $this->conn->prepare('SELECT * FROM events WHERE EventID = ?');
         $handle->bindValue(1, $id, PDO::PARAM_INT);
         $handle->execute();
-        $result = $handle->fetchAll(\PDO::FETCH_ASSOC)[0];
+        $result = $handle->fetchAll(PDO::FETCH_ASSOC)[0];
 
-        $data = new EventObject($id, $result['EventTitle'], $result['JobID'], $result['EventDate'], $result['EventHours']);
-
-        $JobHelper = new JobHelper($this->config);
-        include '../components/editEventForm.php';
+        if (!empty($result)) {
+            $data = new EventObject($result['EventID'], $result['EventTitle'], $result['JobID'], $result['EventDate'], $result['EventHours']);
+            $JobHelper = new JobHelper($this->config);
+            include '../components/editEventForm.php';
+        }
     }
 
     public function render_upcoming_events()
@@ -176,13 +178,11 @@ class EventObject
         return date('m', strtotime($this->date));
     }
 
-    public function getDate()
-    {
-        return getMonth() . "/" . getDay() . "/" . getYear();
-    }
+// --Commented out by Inspection START (5/2/20, 9:44 AM):
+//    public function getDate()
+//    {
+//        return $this->getMonth() . "/" . $this->getDay() . "/" . $this->getYear();
+//    }
+// --Commented out by Inspection STOP (5/2/20, 9:44 AM)
 
-    public function __toString()
-    {
-        return array($id, $title, $company, $date, $hours);
-    }
 }

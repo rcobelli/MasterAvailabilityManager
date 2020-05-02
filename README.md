@@ -5,10 +5,10 @@
 
 ## How it works
 First, setup all of your jobs under the `Manage Jobs` tab
-    I recommend creating a job called "Personal" with an hourly wage of $0.00 for days where you have a personal commitment or other reason why you can't work
-Second, under `Manage Events`: enter all of the upcoming events that you have (each event is associated with a job)
-Third, under `Manage Shifts`: create shifts for all of the events that you have committed to attending/working.
-    You can leave them as `Unconfirmed` and they will display differently than a confirmed shift on the main dashboard
+    I recommend creating a job called "Personal" with an hourly wage of $0.00 for days when you have a personal commitment or other reason why you can't work
+Second, under `Manage Events`: enter all the upcoming events that you have (each event is associated with a job)
+Third, under `Manage Shifts`: create shifts for all the events that you have committed to attending/working.
+    You can leave them as `Unconfirmed` and they will be color coded accordingly on the main dashboard.
 
 ## Installation
 1. Create a new table in your MySQL DB

@@ -53,7 +53,6 @@ class site
 
     private function renderErrors()
     {
-        $errorOutput = "";
         foreach ($this->errors as $error) {
             echo '<div class="alert alert-danger" role="alert">';
             echo $error;

@@ -1,3 +1,6 @@
+<?php
+/** @var $EventHelper EventHelper */
+?>
 <hr/>
 <form method="post">
     <h2 class="mt-4">New Shift</h2>

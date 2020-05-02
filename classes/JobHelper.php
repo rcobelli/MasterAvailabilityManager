@@ -28,8 +28,7 @@ class JobHelper
     {
         $handle = $this->conn->prepare('SELECT * FROM jobs ORDER BY JobTitle');
         $handle->execute();
-        $result = $handle->fetchAll(\PDO::FETCH_ASSOC);
-        return $result;
+        return $handle->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function updateJob($data)
@@ -66,12 +65,13 @@ class JobHelper
         include '../components/newJobForm.php';
     }
 
+    /** @noinspection PhpUnusedLocalVariableInspection */
     public function render_editJobForm($id)
     {
         $handle = $this->conn->prepare('SELECT * FROM jobs WHERE JobID = ?');
         $handle->bindValue(1, $id, PDO::PARAM_INT);
         $handle->execute();
-        $data = $handle->fetchAll(\PDO::FETCH_ASSOC)[0];
+        $data = $handle->fetchAll(PDO::FETCH_ASSOC)[0];
 
         include '../components/editJobForm.php';
     }

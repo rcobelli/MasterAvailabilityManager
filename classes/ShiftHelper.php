@@ -34,8 +34,7 @@ class ShiftHelper
 
         $handle = $this->conn->prepare($sql);
         $handle->execute();
-        $result = $handle->fetchAll(\PDO::FETCH_ASSOC);
-        return $result;
+        return $handle->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getShiftsByDate($date)
@@ -43,8 +42,7 @@ class ShiftHelper
         $handle = $this->conn->prepare('SELECT ShiftID, ShiftConfirmed, EventTitle, EventDate, EventHours, JobTitle, JobWage, StartTime FROM shifts, events, jobs WHERE events.EventID = shifts.EventID AND jobs.JobID = events.JobID AND EventDate = ?');
         $handle->bindValue(1, $date);
         $handle->execute();
-        $result = $handle->fetchAll(\PDO::FETCH_ASSOC);
-        return $result;
+        return $handle->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getShiftsByMonth($date)
@@ -53,8 +51,7 @@ class ShiftHelper
         $handle->bindValue(1, date('m', strtotime($date)));
         $handle->bindValue(2, date('Y', strtotime($date)));
         $handle->execute();
-        $result = $handle->fetchAll(\PDO::FETCH_ASSOC);
-        return $result;
+        return $handle->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getShift($id)
@@ -62,8 +59,7 @@ class ShiftHelper
         $handle = $this->conn->prepare('SELECT ShiftID, ShiftConfirmed, EventTitle, EventDate, EventHours, JobTitle, JobWage, StartTime FROM shifts, events, jobs WHERE events.EventID = shifts.EventID AND jobs.JobID = events.JobID AND ShiftID = ?');
         $handle->bindValue(1, $id);
         $handle->execute();
-        $result = $handle->fetchAll(\PDO::FETCH_ASSOC)[0];
-        return $result;
+        return $handle->fetchAll(PDO::FETCH_ASSOC)[0];
     }
 
     public function updateShift($data)
@@ -85,7 +81,6 @@ class ShiftHelper
             return true;
         } else {
             logMessage("Failed to update shift");
-            exit($handle->errorInfo());
             return false;
         }
     }
@@ -99,17 +94,18 @@ class ShiftHelper
             return true;
         } else {
             logMessage("Failed to create shift");
-            exit('error');
             return false;
         }
     }
 
+    /** @noinspection PhpUnusedLocalVariableInspection */
     public function render_newShiftForm()
     {
         $EventHelper = new EventHelper($this->config);
         include '../components/newShiftForm.php';
     }
 
+    /** @noinspection PhpUnusedLocalVariableInspection */
     public function render_editShiftForm($id)
     {
         $data = $this->getShift($id);
@@ -122,30 +118,7 @@ class ShiftHelper
         echo '<table class="table table-hover"><tbody>';
         $data = $this->getShifts();
 
-        if (empty($data)) {
-            echo '<tr><th>No shifts</th></tr>';
-        } else {
-            foreach ($data as $key) {
-                ?>
-                <tr class="clickable-row" onclick="window.location = '?action=edit&item=<?php echo $key['ShiftID']; ?>'" title="<?php echo $key['ShiftConfirmed'] == 1 ? 'Shift Confirmed' : 'Shift Pending' ?>">
-                <?php
-
-                if ($key['ShiftConfirmed'] == 1) {
-                    echo '<td class="green">';
-                } else {
-                    echo '<td class="yellow">';
-                }
-
-                echo $key['JobTitle'] . ': ' . $key['EventTitle'] . ' ' . date('m/d/Y', strtotime($key['EventDate']));
-
-                if (!is_null($key['StartTime'])) {
-                    echo ' @ ' . date('h:i a', strtotime($key['StartTime']));
-                }
-
-                echo '</td></tr>';
-            }
-        }
-        echo '</tbody></table>';
+        $this->render_shifts($data);
     }
 
     public function render_all_shifts()
@@ -154,12 +127,16 @@ class ShiftHelper
         echo '<table class="table table-hover"><tbody>';
         $data = $this->getShifts(false);
 
+        $this->render_shifts($data);
+    }
+
+    private function render_shifts($data) {
         if (empty($data)) {
             echo '<tr><th>No shifts</th></tr>';
         } else {
             foreach ($data as $key) {
                 ?>
-                <tr class="clickable-row" onclick="window.location = '?action=edit&item=<?php echo $key['ShiftID']; ?>'" title="<?php echo $key['ShiftConfirmed'] == 1 ? 'Shift Confirmed' : 'Shift Pending' ?>">
+            <tr class="clickable-row" onclick="window.location = '?action=edit&item=<?php echo $key['ShiftID']; ?>'" title="<?php echo $key['ShiftConfirmed'] == 1 ? 'Shift Confirmed' : 'Shift Pending' ?>">
                 <?php
 
                 if ($key['ShiftConfirmed'] == 1) {

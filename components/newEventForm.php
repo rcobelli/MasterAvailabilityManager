@@ -1,3 +1,6 @@
+<?php
+/** @var $JobHelper JobHelper */
+?>
 <hr/>
 <form method="post">
     <h2 class="mt-4">New Event</h2>

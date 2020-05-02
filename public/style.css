@@ -20,8 +20,7 @@ a:link, a:hover, a:visited {
     background-color: #748EFF;
 }
 /* change the brand and text color */
-.navbar-custom .navbar-brand,
-.navbar-custom .navbar-text {
+.navbar-custom .navbar-brand {
     color: rgb(255,255,255) !important;
 }
 /* change the link color */
@@ -61,6 +60,7 @@ a:link, a:hover, a:visited {
     color: black;
 }
 
+/*noinspection CssUnusedSymbol*/
 .red {
     background-color: #F5837C;
     color: black;
@@ -71,11 +71,13 @@ a:link, a:hover, a:visited {
     color: black;
 }
 
+/*noinspection CssUnusedSymbol*/
 .orange {
     background-color: orange;
     color: black;
 }
 
+/*noinspection CssUnusedSymbol*/
 .blue {
     background-color: #748EFF;
     color: white;

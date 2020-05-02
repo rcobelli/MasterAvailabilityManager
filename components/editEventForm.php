@@ -1,3 +1,7 @@
+<?php
+/** @var $data EventObject */
+/** @var $JobHelper JobHelper */
+?>
 <hr/>
 <form method="post">
     <h2>Edit Event</h2>
