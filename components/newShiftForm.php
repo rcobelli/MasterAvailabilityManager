@@ -15,6 +15,12 @@
             ?>
         </select>
     </div>
+    <div class="form-group">
+        <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="customSwitch1" name="confirmed">
+            <label class="custom-control-label" for="customSwitch1">Confirmed</label>
+        </div>
+    </div>
     <input type="hidden" name="submit" value="add">
     <button type="submit" class="btn btn-primary mt-3">Submit</button>
 </form>

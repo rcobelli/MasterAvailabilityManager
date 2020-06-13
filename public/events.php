@@ -10,6 +10,16 @@ if ($_POST['submit'] == 'add') {
     if ($helper->createEvent(new EventObject(-1, $_POST['title'], $_POST['company'], $_POST['year'] . "-" . $_POST['month'] . "-" . $_POST['day'], $_POST['hours']))) {
         $actionSuccess = true;
         $_REQUEST['action'] = null;
+
+        if ($_POST['createShift'] == 'on') {
+            $shiftHelper = new ShiftHelper($config);
+            if ($shiftHelper->createShift(array('event' => $helper->getLastEvent(), 'confirmed' => 'on'))) {
+                $actionSuccess = true;
+                $_REQUEST['action'] = null;
+            } else {
+                $errors[] = "Unable to create shift";
+            }
+        }
     } else {
         $errors[] = "Unable to create event";
     }

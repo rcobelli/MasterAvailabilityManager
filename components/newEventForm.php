@@ -30,7 +30,7 @@
         </div>
     </div>
     <div class="form-group">
-        <label for="input3">Company</label>
+        <label for="input3">Job</label>
         <select class="form-control" id="input3" name="company">
             <?php
                 $jobs = $JobHelper->getJobs();
@@ -39,6 +39,12 @@
                 }
             ?>
         </select>
+    </div>
+    <div class="form-group">
+        <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="customSwitch1" name="createShift">
+            <label class="custom-control-label" for="customSwitch1">Create Confirmed Shift</label>
+        </div>
     </div>
     <input type="hidden" name="submit" value="add">
     <button type="submit" class="btn btn-primary mt-3">Submit</button>

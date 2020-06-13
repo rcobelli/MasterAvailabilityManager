@@ -87,8 +87,9 @@ class ShiftHelper
 
     public function createShift($data)
     {
-        $handle = $this->conn->prepare('INSERT INTO shifts (EventID) VALUES (?)');
+        $handle = $this->conn->prepare('INSERT INTO shifts (EventID, ShiftConfirmed) VALUES (?, ?)');
         $handle->bindValue(1, $data['event']);
+        $handle->bindValue(2, $data['confirmed'] == 'on' ? 1 : 0 );
         if ($handle->execute()) {
             logMessage("Successfully created new shift");
             return true;

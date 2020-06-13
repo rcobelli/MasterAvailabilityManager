@@ -31,7 +31,7 @@
         </div>
     </div>
     <div class="form-group">
-        <label for="input3">Company</label>
+        <label for="input3">Job</label>
         <select class="form-control" id="input3" name="company">
             <?php
                 $jobs = $JobHelper->getJobs();
