@@ -37,6 +37,29 @@ class EventHelper
         return $handle->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getUnusedEvents($futureOnly = true)
+    {
+        $data = $this->getEvents($futureOnly);
+
+        if ($data === false) {
+            return false;
+        }
+
+        $output = array();
+
+        foreach ($data as $datum) {
+            // Check to see if there is already a shift for this event
+            $handle = $this->conn->prepare("SELECT ShiftID FROM shifts WHERE EventID = ?");
+            $handle->bindValue(1, $datum['EventID'], PDO::PARAM_INT);
+            $handle->execute();
+            if (empty($handle->fetchAll(PDO::FETCH_ASSOC))) {
+                array_push($output, $datum);
+            }
+        }
+
+        return $output;
+    }
+
     public function getEventsByDate($date)
     {
         $handle = $this->conn->prepare('SELECT EventID, EventTitle, EventDate, EventHours, JobTitle FROM events, jobs WHERE jobs.JobID = events.JobID AND EventDate = ?');

@@ -8,7 +8,7 @@
         <label for="input3">Event</label>
         <select class="form-control" id="input3" name="event">
             <?php
-                $jobs = $EventHelper->getEvents($_GET['all'] != 'true');
+                $jobs = $EventHelper->getUnusedEvents($_GET['all'] != 'true');
                 foreach ($jobs as $job) {
                     echo '<option value="' . $job['EventID'] . '" ' . ($job['EventID'] == $_GET['eventID'] ? ' selected' : '') . '>' . $job['JobTitle'] . ': ' . $job['EventTitle'] . ' ' . date('m/d/Y', strtotime($job['EventDate'])) . '</option>';
                 }
