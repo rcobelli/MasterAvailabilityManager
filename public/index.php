@@ -69,6 +69,9 @@ $shiftHelper = new ShiftHelper($config);
 $day       = 1;
 $wday      = $first_week_day;
 $firstweek = true;
+
+$incomeRunningTotal = 0;
+
 while ($day <= $lastday) {
     if ($firstweek) {
         echo "<tr align=left>";
@@ -119,6 +122,7 @@ while ($day <= $lastday) {
             if ($shift['EventHours'] != 0) {
                 if ($shift['ShiftConfirmed'] == 1) {
                     echo ' ($' . round($shift['EventHours'] * $shift['JobWage']) . ')';
+                    $incomeRunningTotal += round($shift['EventHours'] * $shift['JobWage']);
                 } else {
                     echo ' (' . $shift['EventHours'] . ' hrs)';
                 }
@@ -156,6 +160,7 @@ foreach ($shifts as $shift) {
 
 echo "<h5>Shift Breakdown</h5>";
 echo "<b>Personal:</b> " . $personal . " - <b>Work:</b> " . $work;
+echo "<br/><b>Estimated Income:</b> $" . $incomeRunningTotal;
 
 // End content rendering
 
