@@ -14,6 +14,10 @@ spl_autoload_register(function ($class_name) {
     include 'classes/' . $class_name . '.php';
 });
 
+if ($_COOKIE['centerdesk'] != "loggedIn") {
+    die();
+}
+
 $ini = parse_ini_file("config.ini", true)["am"];
 
 try {
