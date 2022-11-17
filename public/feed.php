@@ -1,5 +1,6 @@
 <?php
 
+$bypassAuth = true;
 include_once("../init.php");
 
 // Make it actually be an ics file
