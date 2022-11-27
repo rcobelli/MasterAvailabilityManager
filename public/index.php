@@ -2,6 +2,10 @@
 
 include '../init.php';
 
+if ($_SERVER['SERVER_NAME'] == "dev.rybel-llc.com" && $_COOKIE['centerdesk'] != "loggedIn") {
+    die();
+}
+
 // Site/page boilerplate
 $site = new site('MAM | Dashboard', $errors, $actionSuccess);
 init_site($site);

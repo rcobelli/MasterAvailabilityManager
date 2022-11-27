@@ -2,6 +2,10 @@
 
 include '../init.php';
 
+if ($_SERVER['SERVER_NAME'] == "dev.rybel-llc.com" && $_COOKIE['centerdesk'] != "loggedIn") {
+    die();
+}
+
 $helper = new EventHelper($config);
 $actionSuccess = false;
 

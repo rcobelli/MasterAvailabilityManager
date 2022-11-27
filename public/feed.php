@@ -1,7 +1,8 @@
 <?php
 
-$bypassAuth = true;
 include_once("../init.php");
+
+// Purposfully not authenticating with the cookie for this page
 
 // Make it actually be an ics file
 header('Content-Type: text/calendar; charset=utf-8');

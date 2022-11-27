@@ -14,10 +14,6 @@ spl_autoload_register(function ($class_name) {
     include 'classes/' . $class_name . '.php';
 });
 
-if ($bypassAuth && $_SERVER['SERVER_NAME'] == "dev.rybel-llc.com" && $_COOKIE['centerdesk'] != "loggedIn") {
-    die();
-}
-
 $ini = parse_ini_file("config.ini", true)["am"];
 
 try {
