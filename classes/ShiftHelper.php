@@ -1,27 +1,12 @@
 <?php
 
-class ShiftHelper
+use Rybel\backbone\Helper;
+
+class ShiftHelper extends Helper
 {
-    private $config;
-    private $conn;
-
-    public function __construct($config)
-    {
-        $this->config = $config;
-        $this->conn = $config['dbo'];
-    }
-
     public function deleteShift($id)
     {
-        $handle = $this->conn->prepare('DELETE FROM shifts WHERE ShiftID = ?');
-        $handle->bindValue(1, $id, PDO::PARAM_INT);
-        if ($handle->execute()) {
-            logMessage("Successfully deleted shift");
-            return true;
-        } else {
-            logMessage("Failed to delete shift");
-            return false;
-        }
+        return $this->query('DELETE FROM shifts WHERE ShiftID = ?', $id);
     }
 
     public function getShifts($futureOnly = true)
@@ -32,34 +17,22 @@ class ShiftHelper
             $sql = 'SELECT ShiftID, ShiftConfirmed, EventTitle, EventDate, EventHours, JobTitle, JobWage, StartTime FROM shifts, events, jobs WHERE events.EventID = shifts.EventID AND jobs.JobID = events.JobID ORDER BY EventDate';
         }
 
-        $handle = $this->conn->prepare($sql);
-        $handle->execute();
-        return $handle->fetchAll(PDO::FETCH_ASSOC);
+        return $this->query($sql);
     }
 
     public function getShiftsByDate($date)
     {
-        $handle = $this->conn->prepare('SELECT ShiftID, ShiftConfirmed, EventTitle, EventDate, EventHours, JobTitle, JobWage, StartTime FROM shifts, events, jobs WHERE events.EventID = shifts.EventID AND jobs.JobID = events.JobID AND EventDate = ?');
-        $handle->bindValue(1, $date);
-        $handle->execute();
-        return $handle->fetchAll(PDO::FETCH_ASSOC);
+        return $this->query('SELECT ShiftID, ShiftConfirmed, EventTitle, EventDate, EventHours, JobTitle, JobWage, StartTime FROM shifts, events, jobs WHERE events.EventID = shifts.EventID AND jobs.JobID = events.JobID AND EventDate = ?', $date);
     }
 
     public function getShiftsByMonth($date)
     {
-        $handle = $this->conn->prepare('SELECT ShiftID, ShiftConfirmed, EventTitle, EventDate, EventHours, JobTitle, JobWage, StartTime FROM shifts, events, jobs WHERE events.EventID = shifts.EventID AND jobs.JobID = events.JobID AND MONTH(EventDate) = ? AND YEAR(EventDate) = ?');
-        $handle->bindValue(1, date('m', strtotime($date)));
-        $handle->bindValue(2, date('Y', strtotime($date)));
-        $handle->execute();
-        return $handle->fetchAll(PDO::FETCH_ASSOC);
+        return $this->query('SELECT ShiftID, ShiftConfirmed, EventTitle, EventDate, EventHours, JobTitle, JobWage, StartTime FROM shifts, events, jobs WHERE events.EventID = shifts.EventID AND jobs.JobID = events.JobID AND MONTH(EventDate) = ? AND YEAR(EventDate) = ?', date('m', strtotime($date)), date('Y', strtotime($date)));
     }
 
     public function getShift($id)
     {
-        $handle = $this->conn->prepare('SELECT ShiftID, ShiftConfirmed, EventTitle, EventDate, EventHours, JobTitle, JobWage, StartTime FROM shifts, events, jobs WHERE events.EventID = shifts.EventID AND jobs.JobID = events.JobID AND ShiftID = ?');
-        $handle->bindValue(1, $id);
-        $handle->execute();
-        return $handle->fetchAll(PDO::FETCH_ASSOC)[0];
+        return $this->query('SELECT ShiftID, ShiftConfirmed, EventTitle, EventDate, EventHours, JobTitle, JobWage, StartTime FROM shifts, events, jobs WHERE events.EventID = shifts.EventID AND jobs.JobID = events.JobID AND ShiftID = ?', $id);
     }
 
     public function updateShift($data)
@@ -70,36 +43,14 @@ class ShiftHelper
             $data['startTime'] = null;
         }
 
-        $handle = $this->conn->prepare('UPDATE shifts SET ShiftConfirmed = ?, StartTime = ? WHERE ShiftID = ?; UPDATE events, shifts SET EventHours = ? WHERE shifts.EventID = events.EventID AND ShiftID = ?');
-        $handle->bindValue(1, $data['confirmation']);
-        $handle->bindValue(2, $data['startTime']);
-        $handle->bindValue(3, $data['id']);
-        $handle->bindValue(4, $data['hours']);
-        $handle->bindValue(5, $data['id']);
-        if ($handle->execute()) {
-            logMessage("Successfully updated shift");
-            return true;
-        } else {
-            logMessage("Failed to update shift");
-            return false;
-        }
+        return $this->query('UPDATE shifts SET ShiftConfirmed = ?, StartTime = ? WHERE ShiftID = ?; UPDATE events, shifts SET EventHours = ? WHERE shifts.EventID = events.EventID AND ShiftID = ?', $data['confirmation'], $data['startTime'], $data['id'], $data['hours'], $data['id']);
     }
 
     public function createShift($data)
     {
-        $handle = $this->conn->prepare('INSERT INTO shifts (EventID, ShiftConfirmed) VALUES (?, ?)');
-        $handle->bindValue(1, $data['event']);
-        $handle->bindValue(2, $data['confirmed'] == 'on' ? 1 : 0 );
-        if ($handle->execute()) {
-            logMessage("Successfully created new shift");
-            return true;
-        } else {
-            logMessage("Failed to create shift");
-            return false;
-        }
+        return $this->query('INSERT INTO shifts (EventID, ShiftConfirmed) VALUES (?, ?)', $data['event'], $data['confirmed'] == 'on' ? 1 : 0 );
     }
 
-    /** @noinspection PhpUnusedLocalVariableInspection */
     public function render_newShiftForm()
     {
         $EventHelper = new EventHelper($this->config);

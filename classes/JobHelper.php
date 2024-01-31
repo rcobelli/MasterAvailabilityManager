@@ -1,63 +1,27 @@
 <?php
 
-class JobHelper
+use Rybel\backbone\Helper;
+
+class JobHelper extends Helper
 {
-    private $config;
-    private $conn;
-
-    public function __construct($config)
-    {
-        $this->config = $config;
-        $this->conn = $config['dbo'];
-    }
-
     public function deleteJob($id)
     {
-        $handle = $this->conn->prepare('DELETE FROM jobs WHERE JobID = ?');
-        $handle->bindValue(1, $id, PDO::PARAM_INT);
-        if ($handle->execute()) {
-            logMessage("Successfully deleted job");
-            return true;
-        } else {
-            logMessage("Failed to delete job");
-            return false;
-        }
+        return $this->query('DELETE FROM jobs WHERE JobID = ?', $id);
     }
 
     public function getJobs()
     {
-        $handle = $this->conn->prepare('SELECT * FROM jobs ORDER BY JobTitle');
-        $handle->execute();
-        return $handle->fetchAll(PDO::FETCH_ASSOC);
+        return $this->query('SELECT * FROM jobs ORDER BY JobTitle');
     }
 
     public function updateJob($data)
     {
-        $handle = $this->conn->prepare('UPDATE jobs SET JobTitle = ?, JobWage = ? WHERE JobID = ?');
-        $handle->bindValue(1, $data['title']);
-        $handle->bindValue(2, $data['wage']);
-        $handle->bindValue(3, $data['id']);
-        if ($handle->execute()) {
-            logMessage("Successfully updated job");
-            return true;
-        } else {
-            logMessage("Failed to update job");
-            return false;
-        }
+        return $this->query('UPDATE jobs SET JobTitle = ?, JobWage = ? WHERE JobID = ?', $data['title'], $data['wage'], $data['id']);
     }
 
     public function createJob($data)
     {
-        $handle = $this->conn->prepare('INSERT INTO jobs (JobTitle, JobWage) VALUES (?, ?)');
-        $handle->bindValue(1, $data['title']);
-        $handle->bindValue(2, $data['wage']);
-        if ($handle->execute()) {
-            logMessage("Successfully created new job");
-            return true;
-        } else {
-            logMessage("Failed to create job");
-            return false;
-        }
+        return $this->query('INSERT INTO jobs (JobTitle, JobWage) VALUES (?, ?)', $data['title'], $data['wage']);
     }
 
     public function render_newJobForm()
@@ -68,10 +32,7 @@ class JobHelper
     /** @noinspection PhpUnusedLocalVariableInspection */
     public function render_editJobForm($id)
     {
-        $handle = $this->conn->prepare('SELECT * FROM jobs WHERE JobID = ?');
-        $handle->bindValue(1, $id, PDO::PARAM_INT);
-        $handle->execute();
-        $data = $handle->fetchAll(PDO::FETCH_ASSOC)[0];
+        $data = $this->query('SELECT * FROM jobs WHERE JobID = ? LIMIT 1', $id);
 
         include '../components/editJobForm.php';
     }

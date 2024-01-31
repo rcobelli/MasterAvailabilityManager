@@ -2,18 +2,20 @@
 
 include '../init.php';
 
-if ($_SERVER['SERVER_NAME'] == "dev.rybel-llc.com" && $_COOKIE['centerdesk'] != "loggedIn") {
+$samlHelper->processSamlInput();
+
+if (!$samlHelper->isLoggedIn()) {
+    header("Location: ?sso");
     die();
 }
 
-// Site/page boilerplate
-$site = new site('MAM | Dashboard', $errors, $actionSuccess);
-init_site($site);
+$config['type'] = Rybel\backbone\LogStream::console;
 
-$page = new page();
-$site->setPage($page);
-$_GET['sidebar-page'] = 1;
-$site->addHeader("../includes/navbar.php");
+// Boilerplate
+$page = new Rybel\backbone\page();
+$page->addHeader("../includes/header.php");
+$page->addFooter("../includes/footer.php");
+$page->addHeader("../includes/navbar.php");
 
 // Start rendering the content
 ob_start();
@@ -169,6 +171,4 @@ echo "<br/><b>Estimated Income:</b> $" . $incomeRunningTotal;
 // End content rendering
 
 $content = ob_get_clean();
-$page->setContent($content);
-
-$site->render();
+$page->render($content);

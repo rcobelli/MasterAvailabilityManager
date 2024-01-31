@@ -2,45 +2,46 @@
 
 include '../init.php';
 
-if ($_SERVER['SERVER_NAME'] == "dev.rybel-llc.com" && $_COOKIE['centerdesk'] != "loggedIn") {
+$samlHelper->processSamlInput();
+
+if (!$samlHelper->isLoggedIn()) {
+    header("Location: index.php");
     die();
 }
 
-$helper = new JobHelper($config);
-$actionSuccess = false;
+$config['type'] = Rybel\backbone\LogStream::console;
 
-// Application login
+$helper = new JobHelper($config);
+
+// Boilerplate
+$page = new Rybel\backbone\page();
+$page->addHeader("../includes/header.php");
+$page->addFooter("../includes/footer.php");
+$page->addHeader("../includes/navbar.php");
+
+// Application logic
 if ($_POST['submit'] == 'add') {
     if ($helper->createJob($_POST)) {
-        $actionSuccess = true;
+        $page->setSuccess(true);
         $_REQUEST['action'] = null;
     } else {
-        $errors[] = "Unable to create job";
+        $page->addError($helper->getErrorMessage());
     }
 } elseif ($_POST['submit'] == 'edit') {
     if ($helper->updateJob($_POST)) {
-        $actionSuccess = true;
+        $page->setSuccess(true);
         $_REQUEST['action'] = null;
     } else {
-        $errors[] = "Unable to update job";
+        $page->addError($helper->getErrorMessage());
     }
 } elseif ($_REQUEST['action'] == 'delete') {
     if ($helper->deleteJob($_REQUEST['item'])) {
-        $actionSuccess = true;
+        $page->setSuccess(true);
         $_REQUEST['action'] = null;
     } else {
-        $errors[] = "Unable to delete job";
+        $page->addError($helper->getErrorMessage());
     }
 }
-
-// Site/page boilerplate
-$site = new site('MAM | Jobs', $errors, $actionSuccess);
-init_site($site);
-
-$page = new page();
-$site->setPage($page);
-$_GET['sidebar-page'] = 2;
-$site->addHeader("../includes/navbar.php");
 
 // Start rendering the content
 ob_start();
@@ -65,7 +66,4 @@ $helper->render_jobs(true);
 
 // End rendering the content
 $content = ob_get_clean();
-$page->setContent($content);
-
-$site->render();
-?>
+$page->render($content);

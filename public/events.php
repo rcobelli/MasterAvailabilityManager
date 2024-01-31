@@ -2,56 +2,54 @@
 
 include '../init.php';
 
-if ($_SERVER['SERVER_NAME'] == "dev.rybel-llc.com" && $_COOKIE['centerdesk'] != "loggedIn") {
+$samlHelper->processSamlInput();
+
+if (!$samlHelper->isLoggedIn()) {
+    header("Location: index.php");
     die();
 }
 
-$helper = new EventHelper($config);
-$actionSuccess = false;
+$config['type'] = Rybel\backbone\LogStream::console;
 
-// Application login
+$helper = new EventHelper($config);
+
+// Boilerplate
+$page = new Rybel\backbone\page();
+$page->addHeader("../includes/header.php");
+$page->addFooter("../includes/footer.php");
+$page->addHeader("../includes/navbar.php");
+
+// Application logic
 if ($_POST['submit'] == 'add') {
     if ($helper->createEvent(new EventObject(-1, $_POST['title'], $_POST['company'], $_POST['year'] . "-" . $_POST['month'] . "-" . $_POST['day'], $_POST['hours']))) {
-        $actionSuccess = true;
-        $_REQUEST['action'] = null;
-
         if ($_POST['createShift'] == 'on') {
             $shiftHelper = new ShiftHelper($config);
             if ($shiftHelper->createShift(array('event' => $helper->getLastEvent(), 'confirmed' => 'on'))) {
-                $actionSuccess = true;
+                $page->setSuccess(true);
                 $_REQUEST['action'] = null;
             } else {
-                $errors[] = "Unable to create shift";
+                $page->addError($helper->getErrorMessage());
             }
+        } else {
+            $page->setSuccess(true);
         }
     } else {
-        $errors[] = "Unable to create event";
+        $page->addError($helper->getErrorMessage());
     }
 } elseif ($_POST['submit'] == 'edit') {
     if ($helper->updateEvent(new EventObject($_POST['id'], $_POST['title'], $_POST['company'], $_POST['year'] . "-" . $_POST['month'] . "-" . $_POST['day'], $_POST['hours']))) {
-        $actionSuccess = true;
+        $page->setSuccess(true);
         $_REQUEST['action'] = null;
     } else {
-        $errors[] = "Unable to update event";
+        $page->addError($helper->getErrorMessage());
     }
 } elseif ($_REQUEST['action'] == 'delete') {
     if ($helper->deleteEvent($_REQUEST['item'])) {
-        $actionSuccess = true;
         $_REQUEST['action'] = null;
     } else {
-        $errors[] = "Unable to delete event";
+        $page->addError($helper->getErrorMessage());
     }
 }
-
-
-// Site/page boilerplate
-$site = new site('MAM | Events', $errors, $actionSuccess);
-init_site($site);
-
-$page = new page();
-$site->setPage($page);
-$_GET['sidebar-page'] = 3;
-$site->addHeader("../includes/navbar.php");
 
 // Start rendering the content
 ob_start();
@@ -83,7 +81,4 @@ if ($_GET['all'] == 'true') {
 // End content rendering
 
 $content = ob_get_clean();
-$page->setContent($content);
-
-$site->render();
-?>
+$page->render($content);

@@ -7,33 +7,17 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item <?php
-                                        if ($_GET['sidebar-page'] == 1) {
-                                            echo 'active';
-                                        }
-                                    ?>">
-                    <a class="nav-link" href="../public/index.php">Dashboard</a>
+                <li class="nav-item">
+                    <a class="nav-link" href="index.php">Dashboard</a>
                 </li>
-                <li class="nav-item <?php
-                                        if ($_GET['sidebar-page'] == 2) {
-                                            echo 'active';
-                                        }
-                                    ?>">
-                    <a class="nav-link" href="../public/jobs.php">Manage Jobs</a>
+                <li class="nav-item">
+                    <a class="nav-link" href="jobs.php">Manage Jobs</a>
                 </li>
-                <li class="nav-item <?php
-                                        if ($_GET['sidebar-page'] == 3) {
-                                            echo 'active';
-                                        }
-                                    ?>">
-                    <a class="nav-link" href="../public/events.php">Manage Events</a>
+                <li class="nav-item">
+                    <a class="nav-link" href="events.php">Manage Events</a>
                 </li>
-                <li class="nav-item <?php
-                                        if ($_GET['sidebar-page'] == 4) {
-                                            echo 'active';
-                                        }
-                                    ?>">
-                    <a class="nav-link" href="../public/shifts.php">Manage Shifts</a>
+                <li class="nav-item">
+                    <a class="nav-link" href="shifts.php">Manage Shifts</a>
                 </li>
             </ul>
         </div>

@@ -31,12 +31,4 @@ class EventObject
     {
         return date('m', strtotime($this->date));
     }
-
-// --Commented out by Inspection START (5/2/20, 9:44 AM):
-//    public function getDate()
-//    {
-//        return $this->getMonth() . "/" . $this->getDay() . "/" . $this->getYear();
-//    }
-// --Commented out by Inspection STOP (5/2/20, 9:44 AM)
-
 }
