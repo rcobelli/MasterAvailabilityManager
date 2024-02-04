@@ -1,8 +1,0 @@
-CREATE TABLE `shifts` (
-  `ShiftID` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `EventID` int(11) NOT NULL,
-  `ShiftConfirmed` tinyint(1) NOT NULL DEFAULT '0',
-  `StartTime` time DEFAULT NULL,
-  `LastUpdated` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`ShiftID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;

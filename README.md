@@ -11,12 +11,16 @@ Third, under `Manage Shifts`: create shifts for all the events that you have com
     You can leave them as `Unconfirmed` and they will be color coded accordingly on the main dashboard.
 
 ## Installation
-1. Create a new table in your MySQL DB
-2. Create the `events`, `shifts`, & `jobs` tables using the provided `.txt` files
-2. Update the credentials in `config example.ini` (for Trello and the DB)
+1. Create a new database in your MySQL instance
+2. Import the `Example DB.sql` for schema
+2. Update the parameters in `config example.ini`
 3. Rename `config example.ini` to `config.ini`
 4. Place the code on a server capable of running PHP
 5. Navigate to the `public` directory to access the website
 
 ## `.ics` Feed
 You can now also get an ICS feed of when you will be studying what. Simply try to add `https://YOUR_DOMAIN/PATH/feed.ics` as a remote calendar. The `.htaccess` will rewrite the `.ics` to `.php` and everything should work out nicely.
+
+## TODO:
+  - Make SSO optional
+  - Support managing multiple user's schedules
