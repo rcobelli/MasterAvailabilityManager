@@ -4,6 +4,8 @@ include_once("../init.php");
 
 // Purposfully not authenticating with the cookie for this page
 
+$config['type'] = Rybel\backbone\LogStream::api;
+
 // Make it actually be an ics file
 header('Content-Type: text/calendar; charset=utf-8');
 header('Content-Disposition: attachment; filename=feed.ics');
