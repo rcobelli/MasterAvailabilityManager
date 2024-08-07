@@ -32,7 +32,7 @@ class ShiftHelper extends Helper
 
     public function getShift($id)
     {
-        return $this->query('SELECT ShiftID, ShiftConfirmed, EventTitle, EventDate, EventHours, JobTitle, JobWage, StartTime FROM shifts, events, jobs WHERE events.EventID = shifts.EventID AND jobs.JobID = events.JobID AND ShiftID = ?', $id);
+        return $this->query('SELECT ShiftID, ShiftConfirmed, EventTitle, EventDate, EventHours, JobTitle, JobWage, StartTime FROM shifts, events, jobs WHERE events.EventID = shifts.EventID AND jobs.JobID = events.JobID AND ShiftID = ? LIMIT 1', $id);
     }
 
     public function updateShift($data)
